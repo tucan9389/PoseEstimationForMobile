@@ -19,13 +19,11 @@ import platform
 import time
 import numpy as np
 import configparser
-import dataset
-import networks
 
 from datetime import datetime
 
-from dataset.dataset import get_train_dataset_pipeline, get_valid_dataset_pipeline
-from networks.networks import get_network
+from dataset import get_train_dataset_pipeline, get_valid_dataset_pipeline
+from networks import get_network
 from dataset_prepare import CocoPose
 from dataset_augment import set_network_input_wh, set_network_scale
 
