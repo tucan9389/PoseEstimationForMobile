@@ -13,8 +13,8 @@
 # ===================================================================================
 # -*- coding: utf-8 -*-
 
-import networks.network_mv2_cpm
-import networks.network_mv2_hourglass
+import network_mv2_cpm
+import network_mv2_hourglass
 
 def get_network(type, input, trainable=True):
     if type == 'mv2_cpm':
