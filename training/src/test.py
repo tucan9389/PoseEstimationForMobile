@@ -24,7 +24,7 @@ def display_image():
     from os.path import join
     from dataset import _parse_function
 
-    BASE_PATH = "/root/hdd/ai_challenger"
+    BASE_PATH = "/root/project/dataset/ai_challenger"
 
     import os
     # os.chdir("..")
