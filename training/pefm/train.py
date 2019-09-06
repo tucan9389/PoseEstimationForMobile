@@ -13,7 +13,7 @@
 # ===================================================================================
 # -*- coding: utf-8 -*-
 
-import tensorflow as tf
+# import tensorflow as tf
 import os
 import platform
 import time
@@ -23,7 +23,7 @@ import dataset
 
 from datetime import datetime
 
-from dataset import get_train_dataset_pipeline, get_valid_dataset_pipeline
+from dataset.dataset import get_train_dataset_pipeline, get_valid_dataset_pipeline
 from networks import get_network
 from dataset_prepare import CocoPose
 from dataset_augment import set_network_input_wh, set_network_scale
