@@ -17,8 +17,8 @@
 
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
-from pefm.networks.network_base import upsample, convb, inverted_bottleneck, is_trainable
-from pefm.networks.common import output_1d, output_2d
+from networks.network_base import upsample, convb, inverted_bottleneck, is_trainable
+from networks.common import output_1d, output_2d
 
 N_KPOINTS = 14
 UP_RATIO = lambda d: int(d * 1.0)
