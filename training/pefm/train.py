@@ -19,11 +19,11 @@ import platform
 import time
 import numpy as np
 import configparser
-import dataset
+# import dataset
 
 from datetime import datetime
 
-from dataset import get_train_dataset_pipeline, get_valid_dataset_pipeline
+from dataset import set_config, get_train_dataset_pipeline, get_valid_dataset_pipeline
 from networks import get_network
 from dataset_prepare import CocoPose
 from dataset_augment import set_network_input_wh, set_network_scale
@@ -96,7 +96,7 @@ def main(argv=None):
     if not os.path.exists(params['logpath']):
         os.makedirs(params['logpath'])
 
-    dataset.set_config(params)
+    set_config(params)
     set_network_input_wh(params['input_width'], params['input_height'])
     set_network_scale(params['scale'])
 
