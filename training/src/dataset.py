@@ -22,6 +22,12 @@ from os.path import join
 from pycocotools.coco import COCO
 import multiprocessing
 
+import os
+import matplotlib as mpl
+if os.environ.get('DISPLAY', '') == '':
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
+
 BASE = "/root/hdd"
 BASE_PATH = ""
 TRAIN_JSON = "ai_challenger_train.json"
