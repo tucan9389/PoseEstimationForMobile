@@ -9,6 +9,8 @@ import cv2
 import struct
 import math
 
+import matplotlib
+matplotlib.use('Agg')
 
 class CocoPose:
     @staticmethod

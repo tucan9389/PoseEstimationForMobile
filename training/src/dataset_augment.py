@@ -12,6 +12,8 @@ import numpy as np
 from tensorpack.dataflow.imgaug.geometry import RotationAndCropValid
 from enum import Enum
 
+
+
 _network_w = 256
 _network_h = 256
 _scale = 2
