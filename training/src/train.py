@@ -111,7 +111,12 @@ def main(argv=None):
     gpus = 'gpus'
     if platform.system() == 'Darwin':
         gpus = 'cpu'
-    training_name = '{}_batch-{}_lr-{}_{}-{}_{}x{}_{}'.format(
+
+    now_date = datetime.now()
+    now_date_string = now_date.strftime("%y%m%d-%H%M%S")
+
+    training_name = '{}_{}_batch-{}_lr-{}_{}-{}_{}x{}_{}'.format(
+        now_date_string,
         params['model'],
         params['batchsize'],
         params['lr'],
