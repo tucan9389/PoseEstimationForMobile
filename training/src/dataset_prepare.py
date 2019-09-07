@@ -22,7 +22,7 @@ class CocoPose:
     def display_image(inp, heatmap=None, pred_heat=None, as_numpy=False):
         global mplset
         mplset = True
-        
+
         import os
         import matplotlib as mpl
         if os.environ.get('DISPLAY', '') == '':
