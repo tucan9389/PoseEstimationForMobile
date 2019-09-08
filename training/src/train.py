@@ -216,10 +216,12 @@ def main(argv=None):
                 if step != 0 and step % params['per_update_tensorboard_step'] == 0:
                     # False will speed up the training time.
                     if params['pred_image_on_tensorboard'] is True:
+
                         valid_loss_value, valid_lh_loss, valid_in_image, valid_in_heat, valid_p_heat = sess.run(
                             [loss, last_heat_loss, input_image, input_heat, pred_heat],
                             feed_dict={handle: valid_handle}
                         )
+
                         result = []
                         for index in range(params['batchsize']):
                             r = CocoPose.display_image(

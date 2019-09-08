@@ -143,7 +143,7 @@ def build_network(input, trainable):
 
             prev = layer
             cpm_out = upsample(layer, 4, "stage_%d_out" % stage_number)
-            print(cpm_out)
+            # print(cpm_out)
             l2s.append(cpm_out)
     # print("-" * 30)
 
