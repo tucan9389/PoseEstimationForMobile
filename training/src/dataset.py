@@ -131,3 +131,25 @@ def get_valid_dataset_pipeline(batch_size=32, epoch=10, buffer_size=1):
         anno_path
     )
     return _get_dataset_pipeline(VALID_ANNO, batch_size, epoch, buffer_size, False)
+
+def get_validation_images(idx, batch_size):
+    global VALID_ANNO
+
+    anno_path = join(BASE_PATH, VALID_JSON)
+    print("preparing annotation from:", anno_path)
+    VALID_ANNO = COCO(
+        anno_path
+    )
+
+    anno = VALID_ANNO
+    imgIds = anno.getImgIds()
+
+    imgs = []
+    labels = []
+    for i in range(batch_size):
+        img, label = _parse_function(imgIds[i + idx], False)
+        imgs.append(img)
+        labels.append(label)
+    # imgs, labels = self._parse_function(imgIds[idx:idx + batch_size])
+    import numpy as np
+    return np.array(imgs), np.array(labels)

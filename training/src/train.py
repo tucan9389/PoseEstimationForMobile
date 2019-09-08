@@ -23,7 +23,7 @@ import dataset
 
 from datetime import datetime
 
-from dataset import get_train_dataset_pipeline, get_valid_dataset_pipeline
+from dataset import get_train_dataset_pipeline, get_validation_images #get_valid_dataset_pipeline
 from networks import get_network
 from dataset_prepare import CocoPose
 from dataset_augment import set_network_input_wh, set_network_scale
@@ -128,10 +128,13 @@ def main(argv=None):
 
     with tf.Graph().as_default(), tf.device("/cpu:0"):
         train_dataset = get_train_dataset_pipeline(params['batchsize'], params['max_epoch'], buffer_size=100)
-        valid_dataset = get_valid_dataset_pipeline(params['batchsize'], params['max_epoch'], buffer_size=100)
+        #valid_dataset = get_valid_dataset_pipeline(params['batchsize'], params['max_epoch'], buffer_size=100)
 
         train_iterator = train_dataset.make_one_shot_iterator()
-        valid_iterator = valid_dataset.make_one_shot_iterator()
+        #valid_iterator = valid_dataset.make_one_shot_iterator()
+
+        valid_in_image, valid_in_heat = get_validation_images(0, params['batchsize'])
+
         
         handle = tf.placeholder(tf.string, shape=[])
         input_iterator = tf.data.Iterator.from_string_handle(handle, train_dataset.output_types, train_dataset.output_shapes)
@@ -199,7 +202,7 @@ def main(argv=None):
         with tf.Session(config=config) as sess:
             init.run()
             train_handle = sess.run(train_iterator.string_handle())
-            valid_handle = sess.run(valid_iterator.string_handle())
+            # valid_handle = sess.run(valid_iterator.string_handle())
             coord = tf.train.Coordinator()
             threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
@@ -217,9 +220,11 @@ def main(argv=None):
                     # False will speed up the training time.
                     if params['pred_image_on_tensorboard'] is True:
 
-                        valid_loss_value, valid_lh_loss, valid_in_image, valid_in_heat, valid_p_heat = sess.run(
-                            [loss, last_heat_loss, input_image, input_heat, pred_heat],
-                            feed_dict={handle: valid_handle}
+                        valid_loss_value, valid_lh_loss, valid_p_heat = sess.run(
+                            [loss, last_heat_loss, pred_heat],
+                            feed_dict={#handle: valid_handle,
+                                       input_image: valid_in_image,
+                                       input_heat: valid_in_heat}
                         )
 
                         result = []
@@ -250,8 +255,8 @@ def main(argv=None):
                     print(format_str % (datetime.now(), step, loss_value, lh_loss, examples_per_sec, sec_per_batch))
 
                     # tensorboard visualization
-                    merge_op = sess.run(summary_merge_op, feed_dict={handle: valid_handle})
-                    summary_writer.add_summary(merge_op, step)
+                    # merge_op = sess.run(summary_merge_op, feed_dict={handle: valid_handle})
+                    # summary_writer.add_summary(merge_op, step)
 
                 # save model
                 if step != 0 and step % params['per_saved_model_step'] == 0:
