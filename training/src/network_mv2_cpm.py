@@ -19,7 +19,7 @@ import tensorflow.contrib.slim as slim
 from network_base import max_pool, upsample, inverted_bottleneck, separable_conv, convb, is_trainable
 
 N_KPOINTS = 14
-STAGE_NUM = 6
+STAGE_NUM = 5
 
 out_channel_ratio = lambda d: max(int(d * 0.75), 8)
 up_channel_ratio = lambda d: int(d * 1.)
@@ -31,6 +31,8 @@ def build_network(input, trainable):
 
     net = convb(input, 3, 3, out_channel_ratio(32), 2, name="Conv2d_0")
 
+    # print("=" * 30)
+
     with tf.variable_scope('MobilenetV2'):
 
         # 128, 112
@@ -39,6 +41,8 @@ def build_network(input, trainable):
                                       (1, out_channel_ratio(16), 0, 3),
                                       (1, out_channel_ratio(16), 0, 3)
                                   ], scope="MobilenetV2_part_0")
+
+        # print(mv2_branch_0)
 
         # 64, 56
         mv2_branch_1 = slim.stack(mv2_branch_0, inverted_bottleneck,
@@ -50,6 +54,8 @@ def build_network(input, trainable):
                                       (up_channel_ratio(6), out_channel_ratio(24), 0, 3),
                                   ], scope="MobilenetV2_part_1")
 
+        # print(mv2_branch_1)
+
         # 32, 28
         mv2_branch_2 = slim.stack(mv2_branch_1, inverted_bottleneck,
                                   [
@@ -59,6 +65,8 @@ def build_network(input, trainable):
                                       (up_channel_ratio(6), out_channel_ratio(32), 0, 3),
                                       (up_channel_ratio(6), out_channel_ratio(32), 0, 3),
                                   ], scope="MobilenetV2_part_2")
+
+        # print(mv2_branch_2)
 
         # 16, 14
         mv2_branch_3 = slim.stack(mv2_branch_2, inverted_bottleneck,
@@ -70,6 +78,8 @@ def build_network(input, trainable):
                                       (up_channel_ratio(6), out_channel_ratio(64), 0, 3),
                                   ], scope="MobilenetV2_part_3")
 
+        # print(mv2_branch_3)
+
         # 8, 7
         mv2_branch_4 = slim.stack(mv2_branch_3, inverted_bottleneck,
                                   [
@@ -79,6 +89,16 @@ def build_network(input, trainable):
                                       (up_channel_ratio(6), out_channel_ratio(96), 0, 3),
                                       (up_channel_ratio(6), out_channel_ratio(96), 0, 3)
                                   ], scope="MobilenetV2_part_4")
+
+        # print(mv2_branch_4)
+
+        # print("*"*30)
+        # print(max_pool(mv2_branch_0, 4, 4, 4, 4, name="mv2_0_max_pool"))
+        # print(max_pool(mv2_branch_1, 2, 2, 2, 2, name="mv2_1_max_pool"))
+        # print(mv2_branch_2)
+        # print(upsample(mv2_branch_3, 2, name="mv2_3_upsample"))
+        # print(upsample(mv2_branch_4, 4, name="mv2_4_upsample"))
+        # print("*" * 30)
 
         cancat_mv2 = tf.concat(
             [
@@ -90,6 +110,9 @@ def build_network(input, trainable):
             ]
             , axis=3)
 
+        # print(cancat_mv2)
+
+    # print("-"*30)
     with tf.variable_scope("Convolutional_Pose_Machine"):
         l2s = []
         prev = None
@@ -105,21 +128,23 @@ def build_network(input, trainable):
                 kernel_size = 3
                 lastest_channel_size = 512
 
-            _ = slim.stack(inputs, inverted_bottleneck,
+            layer = slim.stack(inputs, inverted_bottleneck,
                            [
                                (2, out_channel_cpm(32), 0, kernel_size),
                                (up_channel_ratio(4), out_channel_cpm(32), 0, kernel_size),
                                (up_channel_ratio(4), out_channel_cpm(32), 0, kernel_size),
                            ], scope="stage_%d_mv2" % stage_number)
 
-            _ = slim.stack(_, separable_conv,
+            layer = slim.stack(layer, separable_conv,
                            [
                                (out_channel_ratio(lastest_channel_size), 1, 1),
                                (N_KPOINTS, 1, 1)
                            ], scope="stage_%d_mv1" % stage_number)
 
-            prev = _
-            cpm_out = upsample(_, 4, "stage_%d_out" % stage_number)
+            prev = layer
+            cpm_out = upsample(layer, 4, "stage_%d_out" % stage_number)
+            print(cpm_out)
             l2s.append(cpm_out)
+    # print("-" * 30)
 
     return cpm_out, l2s
