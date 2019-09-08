@@ -49,7 +49,7 @@ class CocoPose:
             a.set_title('Pred_Heatmap')
             plt.imshow(CocoPose.get_bgimg(inp, target_size=(pred_heat.shape[1], pred_heat.shape[0])), alpha=0.5)
             tmp = np.amax(pred_heat, axis=2)
-            plt.imshow(tmp, cmap=plt.cm.gray, alpha=1)
+            plt.imshow(tmp, cmap=plt.cm.gray, alpha=1, vmin=0.0, vmax=1.0)
             plt.colorbar()
 
         if not as_numpy:
