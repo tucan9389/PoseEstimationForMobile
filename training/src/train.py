@@ -115,15 +115,20 @@ def main(argv=None):
     now_date = datetime.now()
     now_date_string = now_date.strftime("%y%m%d-%H%M%S")
 
-    training_name = '{}_{}_batch-{}_lr-{}_{}-{}_{}x{}_{}'.format(
+    # training_name = '{}_{}_batch-{}_lr-{}_{}-{}_{}x{}_{}'.format(
+    #     now_date_string,
+    #     params['model'],
+    #     params['batchsize'],
+    #     params['lr'],
+    #     gpus,
+    #     params['gpus'],
+    #     params['input_width'], params['input_height'],
+    #     config_file.replace("/", "-").replace(".cfg", "")
+    # )
+
+    training_name = '{}_{}_training_test-1'.format(
         now_date_string,
-        params['model'],
-        params['batchsize'],
-        params['lr'],
-        gpus,
-        params['gpus'],
-        params['input_width'], params['input_height'],
-        config_file.replace("/", "-").replace(".cfg", "")
+        params['model']
     )
 
     with tf.Graph().as_default(), tf.device("/cpu:0"):
@@ -247,11 +252,11 @@ def main(argv=None):
                         )
                         summary_writer.add_summary(comparsion_of_pred_result, step)
 
-                        # Scaler(loss, last_layer_loss, learning_rate)
-                        valid_loss_value, valid_lh_loss, valid_in_image, valid_in_heat, valid_p_heat = sess.run(
-                            [loss, last_heat_loss, input_image, input_heat, pred_heat],
-                            feed_dict={handle: valid_handle}
-                        )
+                        # # Scaler(loss, last_layer_loss, learning_rate)
+                        # valid_loss_value, valid_lh_loss, valid_in_image, valid_in_heat, valid_p_heat = sess.run(
+                        #     [loss, last_heat_loss, input_image, input_heat, pred_heat],
+                        #     feed_dict={handle: valid_handle}
+                        # )
 
                     # print train info
                     num_examples_per_step = params['batchsize'] * params['gpus']
@@ -260,9 +265,9 @@ def main(argv=None):
                     format_str = ('%s: step %d, loss = %.2f, last_heat_loss = %.2f (%.1f examples/sec; %.3f sec/batch)')
                     print(format_str % (datetime.now(), step, loss_value, lh_loss, examples_per_sec, sec_per_batch))
 
-                    # tensorboard visualization
-                    merge_op = sess.run(summary_merge_op, feed_dict={handle: valid_handle})
-                    summary_writer.add_summary(merge_op, step)
+                    # # tensorboard visualization
+                    # merge_op = sess.run(summary_merge_op, feed_dict={handle: valid_handle})
+                    # summary_writer.add_summary(merge_op, step)
 
                 # save model
                 if step != 0 and step % params['per_saved_model_step'] == 0:
