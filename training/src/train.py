@@ -237,7 +237,7 @@ def main(argv=None):
                                        input_heat: valid_in_heat}
                         )
 
-                        output_image_name = "step = {}" % step
+                        output_image_name = "step = {}".format(step)
                         output_image_file = output_image_name + ".png"
                         output_image_path = os.path.join(params['output_image_path'], training_name, output_image_file)
 
