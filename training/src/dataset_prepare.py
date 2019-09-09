@@ -54,7 +54,7 @@ class CocoPose:
 
         if file_path is not None:
             if plot_title is not None:
-                plt.title(plot_title)
+                plt.suptitle(plot_title)
 
             plt.savefig(file_path)
 
