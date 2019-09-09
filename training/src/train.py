@@ -237,19 +237,21 @@ def main(argv=None):
                                        input_heat: valid_in_heat}
                         )
 
-                        output_image_name = "step = {}".format(step)
-                        output_image_file = output_image_name + ".png"
-                        output_image_path = os.path.join(params['output_image_path'], training_name, output_image_file)
-
                         result = []
                         for index in range(params['batchsize']):
+                            output_image_title = "step = {}".format(step)
+                            output_image_name = "sample_image_{}_%05d".format(index) % step
+                            output_image_file = output_image_name + ".png"
+                            output_image_path = os.path.join(params['output_image_path'], training_name,
+                                                             output_image_file)
+
                             r = CocoPose.display_image(
                                     valid_in_image[index,:,:,:],
                                     heatmap=valid_in_heat[index,:,:,:],
                                     pred_heat=valid_p_heat[index,:,:,:],
                                     as_numpy=True,
                                     file_path=output_image_path,
-                                    plot_title=output_image_name
+                                    plot_title=output_image_title
                                 )
                             result.append(
                                 r.astype(np.float32)
