@@ -103,6 +103,8 @@ def main(argv=None):
         os.makedirs(params['modelpath'])
     if not os.path.exists(params['logpath']):
         os.makedirs(params['logpath'])
+    if not os.path.exists(params['output_image_path']):
+        os.makedirs(params['output_image_path'])
 
     dataset.set_config(params)
     set_network_input_wh(params['input_width'], params['input_height'])
@@ -130,6 +132,9 @@ def main(argv=None):
         now_date_string,
         params['model']
     )
+
+    if not os.path.exists(os.path.join(params['output_image_path'], training_name)):
+        os.makedirs(os.path.join(params['output_image_path'], training_name))
 
     with tf.Graph().as_default(), tf.device("/cpu:0"):
         train_dataset = get_train_dataset_pipeline(params['batchsize'], params['max_epoch'], buffer_size=100)
@@ -232,17 +237,25 @@ def main(argv=None):
                                        input_heat: valid_in_heat}
                         )
 
+                        output_image_name = "step = {}" % step
+                        output_image_file = output_image_name + ".png"
+                        output_image_path = os.path.join(params['output_image_path'], training_name, output_image_file)
+
                         result = []
                         for index in range(params['batchsize']):
                             r = CocoPose.display_image(
                                     valid_in_image[index,:,:,:],
-                                    valid_in_heat[index,:,:,:],
-                                    valid_p_heat[index,:,:,:],
-                                    True
+                                    heatmap=valid_in_heat[index,:,:,:],
+                                    pred_heat=valid_p_heat[index,:,:,:],
+                                    as_numpy=True,
+                                    file_path=output_image_path,
+                                    plot_title=output_image_name
                                 )
                             result.append(
                                 r.astype(np.float32)
                             )
+
+                            print(r)
 
                         comparsion_of_pred_result = sess.run(
                             pred_result__summary,

@@ -25,7 +25,7 @@ class CocoPose:
         return inp
 
     @staticmethod
-    def display_image(inp, heatmap=None, pred_heat=None, as_numpy=False):
+    def display_image(inp, heatmap=None, pred_heat=None, as_numpy=False, file_path=None, plot_title=None):
         global mplset
         mplset = True
 
@@ -51,6 +51,12 @@ class CocoPose:
             tmp = np.amax(pred_heat, axis=2)
             plt.imshow(tmp, cmap=plt.cm.gray, alpha=1, vmin=0.0, vmax=1.0)
             plt.colorbar()
+
+        if file_path is not None:
+            if plot_title is not None:
+                plt.title(plot_title, y=-0.01)
+
+            plt.savefig(file_path)
 
         if not as_numpy:
             plt.show()
