@@ -255,8 +255,6 @@ def main(argv=None):
                                 r.astype(np.float32)
                             )
 
-                            print(r)
-
                         comparsion_of_pred_result = sess.run(
                             pred_result__summary,
                             feed_dict={
