@@ -143,7 +143,7 @@ def main(argv=None):
         train_iterator = train_dataset.make_one_shot_iterator()
         valid_iterator = valid_dataset.make_one_shot_iterator()
 
-        valid_in_image, valid_in_heat = get_validation_images(32, params['batchsize'])
+        # valid_in_image, valid_in_heat = get_validation_images(32, params['batchsize'])
 
         
         handle = tf.placeholder(tf.string, shape=[])
@@ -230,34 +230,34 @@ def main(argv=None):
                     # False will speed up the training time.
                     if params['pred_image_on_tensorboard'] is True:
 
-                        valid_loss_value, valid_lh_loss, valid_p_heat = sess.run(
-                            [loss, last_heat_loss, pred_heat],
-                            feed_dict={#handle: valid_handle,
-                                       input_image: valid_in_image,
-                                       input_heat: valid_in_heat}
-                        )
-
-                        # # Scaler(loss, last_layer_loss, learning_rate)
-                        # valid_loss_value, valid_lh_loss, valid_in_image, valid_in_heat, valid_p_heat = sess.run(
-                        #     [loss, last_heat_loss, input_image, input_heat, pred_heat],
-                        #     feed_dict={handle: valid_handle}
+                        # valid_loss_value, valid_lh_loss, valid_p_heat = sess.run(
+                        #     [loss, last_heat_loss, pred_heat],
+                        #     feed_dict={#handle: valid_handle,
+                        #                input_image: valid_in_image,
+                        #                input_heat: valid_in_heat}
                         # )
+
+                        # Scaler(loss, last_layer_loss, learning_rate)
+                        valid_loss_value, valid_lh_loss, valid_in_image, valid_in_heat, valid_p_heat = sess.run(
+                            [loss, last_heat_loss, input_image, input_heat, pred_heat],
+                            feed_dict={handle: valid_handle}
+                        )
 
                         result = []
                         for index in range(params['batchsize']):
-                            output_image_title = "step = {}".format(step)
-                            output_image_name = "sample_image_{}_%05d".format(index) % step
-                            output_image_file = output_image_name + ".png"
-                            output_image_path = os.path.join(params['output_image_path'], training_name,
-                                                             output_image_file)
+                            # output_image_title = "step = {}".format(step)
+                            # output_image_name = "sample_image_{}_%05d".format(index) % step
+                            # output_image_file = output_image_name + ".png"
+                            # output_image_path = os.path.join(params['output_image_path'], training_name,
+                            #                                  output_image_file)
 
                             r = CocoPose.display_image(
                                     valid_in_image[index,:,:,:],
                                     heatmap=valid_in_heat[index,:,:,:],
                                     pred_heat=valid_p_heat[index,:,:,:],
                                     as_numpy=True,
-                                    file_path=output_image_path,
-                                    plot_title=output_image_title
+                                    # file_path=output_image_path,
+                                    # plot_title=output_image_title
                                 )
                             result.append(
                                 r.astype(np.float32)
@@ -278,9 +278,9 @@ def main(argv=None):
                     format_str = ('%s: step %d, loss = %.2f, last_heat_loss = %.2f (%.1f examples/sec; %.3f sec/batch)')
                     print(format_str % (datetime.now(), step, loss_value, lh_loss, examples_per_sec, sec_per_batch))
 
-                    # # tensorboard visualization
-                    # merge_op = sess.run(summary_merge_op, feed_dict={handle: valid_handle})
-                    # summary_writer.add_summary(merge_op, step)
+                    # tensorboard visualization
+                    merge_op = sess.run(summary_merge_op, feed_dict={handle: valid_handle})
+                    summary_writer.add_summary(merge_op, step)
 
                 # save model
                 if step != 0 and step % params['per_saved_model_step'] == 0:
