@@ -145,7 +145,6 @@ def main(argv=None):
 
         # valid_in_image, valid_in_heat = get_validation_images(32, params['batchsize'])
 
-        
         handle = tf.placeholder(tf.string, shape=[])
         input_iterator = tf.data.Iterator.from_string_handle(handle, train_dataset.output_types, train_dataset.output_shapes)
 
