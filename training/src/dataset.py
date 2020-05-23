@@ -68,16 +68,6 @@ def _parse_function(imgId, is_train, ann=None):
     else:
         img_path = join(BASE, "valid", "images", img_meta['file_name'])
 
-    print()
-    print()
-    print()
-    print(BASE)
-    print(img_meta['file_name'])
-    print(img_path)
-    print(img_path)
-    print(img_path)
-    print(img_path)
-
     img_meta_data = CocoMetadata(idx, img_path, img_meta, img_anno, sigma=6.0)
     img_meta_data = pose_random_scale(img_meta_data)
     img_meta_data = pose_rotation(img_meta_data)
