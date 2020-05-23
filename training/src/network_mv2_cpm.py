@@ -16,7 +16,7 @@
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
-from network_base import max_pool, upsample, inverted_bottleneck, separable_conv, convb, is_trainable
+from training.src.network_base import max_pool, upsample, inverted_bottleneck, separable_conv, convb, is_trainable
 
 N_KPOINTS = 14
 STAGE_NUM = 6
