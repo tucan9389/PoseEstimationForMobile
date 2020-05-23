@@ -63,8 +63,11 @@ def _parse_function(imgId, is_train, ann=None):
     anno_ids = anno.getAnnIds(imgIds=imgId)
     img_anno = anno.loadAnns(anno_ids)
     idx = img_meta['id']
-    img_path = join(BASE, img_meta['file_name'])
-    
+    if is_train == True:
+        img_path = join(BASE, "train", "images", img_meta['file_name'])
+    else:
+        img_path = join(BASE, "valid", "images", img_meta['file_name'])
+
     print()
     print()
     print()
