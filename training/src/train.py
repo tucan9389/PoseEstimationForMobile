@@ -39,6 +39,7 @@ def get_input_iter(batchsize, epoch, is_train=True):
 def get_loss_and_output(model, batchsize, input_image, input_heat, reuse_variables=None):
     losses = []
 
+    print("input_image.shape:", input_image.shape)
     with tf.variable_scope(tf.get_variable_scope(), reuse=reuse_variables):
         _, pred_heatmaps_all = get_network(model, input_image, True)
 
