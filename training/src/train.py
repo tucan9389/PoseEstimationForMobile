@@ -37,6 +37,11 @@ def get_input_iter(batchsize, epoch, is_train=True):
     return iter
 
 def get_loss_and_output(model, batchsize, input_image, input_heat, reuse_variables=None):
+    print(batchsize)
+    print(batchsize)
+    print(batchsize)
+    print(batchsize)
+    print(batchsize)
     losses = []
 
     with tf.variable_scope(tf.get_variable_scope(), reuse=reuse_variables):
