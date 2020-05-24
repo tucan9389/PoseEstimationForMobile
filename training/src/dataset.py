@@ -72,7 +72,7 @@ def _parse_function(imgId, is_train, ann=None):
     img_meta_data = CocoMetadata(idx, img_path, img_meta, img_anno, sigma=6.0)
     img_meta_data = pose_random_scale(img_meta_data)
     img_meta_data = pose_rotation(img_meta_data)
-    img_meta_data = pose_flip(img_meta_data)
+    # img_meta_data = pose_flip(img_meta_data)
     img_meta_data = pose_resize_shortestedge_random(img_meta_data)
     img_meta_data = pose_crop_random(img_meta_data)
     return pose_to_img(img_meta_data)
