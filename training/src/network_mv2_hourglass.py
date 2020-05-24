@@ -93,5 +93,5 @@ def build_network(input, trainable):
             continue
         scale = net_h_w // l2_w_h
         l2s[index] = upsample(l2, scale, name="upsample_for_loss_%d" % index)
-    print(hg_out.shape())
+    print(hg_out.shape)
     return hg_out, l2s
