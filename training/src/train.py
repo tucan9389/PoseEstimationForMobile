@@ -42,9 +42,10 @@ def get_loss_and_output(model, batchsize, input_image, input_heat, reuse_variabl
     with tf.variable_scope(tf.get_variable_scope(), reuse=reuse_variables):
         _, pred_heatmaps_all = get_network(model, input_image, True)
 
-    print(pred_heatmaps_all.shape)
+    print("len(pred_heatmaps_all):", len(pred_heatmaps_all))
 
     for idx, pred_heat in enumerate(pred_heatmaps_all):
+        print(pred_heat.shape)
         loss_l2 = tf.nn.l2_loss(tf.concat(pred_heat, axis=0) - input_heat, name='loss_heatmap_stage%d' % idx)
         losses.append(loss_l2)
 
