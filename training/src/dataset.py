@@ -17,7 +17,7 @@ import tensorflow as tf
 from os.path import join
 from pycocotools.coco import COCO
 
-from training.src.dataset_augment import pose_random_scale, pose_rotation, pose_flip, pose_resize_shortestedge_random, \
+from training.src.dataset_augment import pose_random_scale, pose_rotation, pose_resize_shortestedge_random, \
     pose_crop_random, pose_to_img
 from training.src.dataset_prepare import CocoMetadata
 
