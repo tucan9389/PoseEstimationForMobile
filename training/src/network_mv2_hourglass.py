@@ -9,7 +9,7 @@ import tensorflow.contrib.slim as slim
 
 from training.src.network_base import max_pool, upsample, inverted_bottleneck, separable_conv, convb, is_trainable
 
-N_KPOINTS = 14
+N_KPOINTS = 4
 STAGE_NUM = 4
 
 out_channel_ratio = lambda d: int(d * 1.0)
