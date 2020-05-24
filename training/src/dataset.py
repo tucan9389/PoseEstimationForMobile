@@ -25,8 +25,8 @@ from dataset_prepare import CocoMetadata
 
 BASE = "/root/hdd"
 BASE_PATH = ""
-TRAIN_JSON = "train/annotation.json"
-VALID_JSON = "valid/annotation.json"
+TRAIN_JSON = "train/annotations.json"
+VALID_JSON = "valid/annotations.json"
 
 TRAIN_ANNO = None
 VALID_ANNO = None
